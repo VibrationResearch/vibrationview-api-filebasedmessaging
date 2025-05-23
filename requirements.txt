@@ -1,0 +1,26 @@
+# VibrationVIEW Client Requirements
+# 
+# This application uses only Python standard library modules.
+# No additional packages need to be installed via pip.
+#
+# Standard library modules used:
+# - tkinter (GUI framework)
+# - winreg (Windows registry access) 
+# - os (operating system interface)
+# - sys (system-specific parameters)
+# - time (time-related functions)
+# - subprocess (subprocess management)
+# - threading (thread-based parallelism)
+# - pathlib (object-oriented filesystem paths)
+# - datetime (date and time handling)
+# - json (JSON encoder/decoder)
+# - stat (file statistics - for future permission handling)
+#
+# Python version requirement:
+# python>=3.6
+#
+# Platform requirement:
+# Windows (due to winreg dependency and VibrationVIEW software)
+#
+# Note: If you need to install Python, download from https://python.org
+# Ensure tkinter is included (it's included by default in most Python installations)
