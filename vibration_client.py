@@ -51,7 +51,16 @@ class VibrationViewClient:
             # Get application path
             app_path = os.path.dirname(os.path.abspath(__file__))
             self.control_file = os.path.join(app_path, "RemoteControl.txt")
-            
+            # Set response file path 
+            # Note the RemoteControl.Status is in C:\Program Files by default, require a permissions modification,
+            # or running vibrationview with elevated permissions (As Administrator)
+            if self.system_file_path:
+                self.response_file = os.path.join(self.system_file_path, "RemoteControl.Status")
+
+            # when we add the registry setting to setup the response file - this is better            
+            # self.response_file = os.path.join(app_path, "RemoteControl.Status")
+
+
             # Try to get system file path from registry
             try:
                 keyname = rf"SOFTWARE\Vibration Research Corporation\{VIBRATIONVIEW_VERSION}"
@@ -82,6 +91,9 @@ class VibrationViewClient:
                                               0, winreg.KEY_SET_VALUE) as param_key:
                                 winreg.SetValueEx(param_key, "Remote Control File", 0, 
                                                 winreg.REG_SZ, self.control_file)
+                                winreg.SetValueEx(param_key, "Remote Status File", 0, 
+                                                winreg.REG_SZ, self.response_file)
+                                
                                 print(f"Updated registry: Remote Control File = {self.control_file}")
                                 # Notify user that VibrationVIEW needs to be restarted
                                 messagebox.showinfo("Registry Updated", 
@@ -100,11 +112,6 @@ class VibrationViewClient:
                 if self.system_file_path and not self.system_file_path.endswith("\\"):
                     self.system_file_path += "\\"
                     
-            # Set response file path 
-            # Note the RemoteControl.Status is in C:\Program Files by default, require a permissions modification,
-            # or running vibrationview with elevated permissions (As Administrator)
-            if self.system_file_path:
-                self.response_file = os.path.join(self.system_file_path, "RemoteControl.Status")
             
             # Initialize file time tracking
             self.last_file_time = self.get_file_time(self.response_file)
