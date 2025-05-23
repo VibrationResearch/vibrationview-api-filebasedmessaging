@@ -134,6 +134,7 @@ class VibrationViewClient:
         ttk.Button(button_frame, text="Stop", command=self.stop_test, width=12).grid(row=2, column=0, pady=5)
         ttk.Button(button_frame, text="Status", command=self.get_status, width=12).grid(row=3, column=0, pady=5)
         ttk.Button(button_frame, text="Convert", command=self.convert_data, width=12).grid(row=4, column=0, pady=5)
+        ttk.Button(button_frame, text="Clear Log", command=self.clear_log, width=12).grid(row=5, column=0, pady=5)
         
         # Response text area
         text_frame = ttk.Frame(main_frame)
@@ -170,10 +171,34 @@ class VibrationViewClient:
             with open(self.control_file, 'w') as f:
                 f.write(command)
             self.current_command = command
+            self.log_command(command)
             self.start_refresh_timer()
             self.status_var.set(f"Sent command: {command}")
         except Exception as e:
             messagebox.showerror("Send Command Error", f"Error sending command: {e}")
+    
+    def log_command(self, command):
+        """Log the sent command with timestamp"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        self.response_text.config(state=tk.NORMAL)
+        
+        # If this is not the first entry, add a separator
+        if self.response_text.get(1.0, tk.END).strip():
+            self.response_text.insert(tk.END, "\n")
+        
+        # Add timestamp and command
+        self.response_text.insert(tk.END, f"[{timestamp}] Sent: {command}\n")
+        
+        self.response_text.config(state=tk.DISABLED)
+        self.response_text.see(tk.END)
+    
+    def clear_log(self):
+        """Clear the response log"""
+        self.response_text.config(state=tk.NORMAL)
+        self.response_text.delete(1.0, tk.END)
+        self.response_text.config(state=tk.DISABLED)
+        self.status_var.set("Log cleared")
     
     def start_refresh_timer(self):
         """Start the refresh timer to check for responses"""
@@ -247,10 +272,18 @@ class VibrationViewClient:
             self.update_response_text(f"Error reading response: {e}")
     
     def update_response_text(self, text):
-        """Update the response text widget"""
+        """Update the response text widget as a log with timestamps"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
         self.response_text.config(state=tk.NORMAL)
-        self.response_text.delete(1.0, tk.END)
-        self.response_text.insert(tk.END, text)
+        
+        # If this is not the first entry, add a separator
+        if self.response_text.get(1.0, tk.END).strip():
+            self.response_text.insert(tk.END, "\n" + "-" * 50 + "\n")
+        
+        # Add timestamp and response
+        self.response_text.insert(tk.END, f"[{timestamp}] Response:\n{text}\n")
+        
         self.response_text.config(state=tk.DISABLED)
         self.response_text.see(tk.END)
     
