@@ -43,6 +43,10 @@ class VibrationViewClient:
         
     def setup_file_paths(self):
         """Setup file paths and registry settings"""
+
+        self.profile_file_path = "C:\\VibrationVIEW\\Profiles\\"
+        self.data_file_path = "C:\\VibrationVIEW\\Data\\"
+
         try:
             # Get application path
             app_path = os.path.dirname(os.path.abspath(__file__))
@@ -260,7 +264,7 @@ class VibrationViewClient:
             title="Select Profile",
             defaultextension=".vrp",
             filetypes=[("Random Profiles", "*.vrp"), ("All files", "*.*")],
-            initialdir=self.system_file_path
+            initialdir=self.profile_file_path
         )
         
         if file_path and os.path.exists(file_path):
@@ -289,7 +293,7 @@ class VibrationViewClient:
             title="Select Data File",
             defaultextension=".vrd",
             filetypes=[("Random Data", "*.vrd"), ("All files", "*.*")],
-            initialdir=self.system_file_path
+            initialdir=self.data_file_path
         )
         
         if file_path and os.path.exists(file_path):
