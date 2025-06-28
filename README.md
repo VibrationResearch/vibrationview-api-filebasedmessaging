@@ -20,6 +20,7 @@ The VibrationVIEW Client enables remote control of VibrationVIEW software by sen
 - Python 3.6 or higher
 - Windows operating system
 - VibrationVIEW software installed
+- VibrationVIEW automation option (VR9604) - OR - VibrationVIEW may be run in Simulation mode without any additional hardware or software
 - tkinter (included with Python)
 
 ## Installation
