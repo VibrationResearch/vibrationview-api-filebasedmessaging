@@ -79,6 +79,14 @@ The application reads from and writes to these registry locations:
 - **Installation Path**: `HKEY_LOCAL_MACHINE\SOFTWARE\Vibration Research Corporation\{VERSION}`
 - **Remote Control**: `HKEY_CURRENT_USER\SOFTWARE\Vibration Research Corporation\VibrationVIEW\{VERSION}\System Parameters`
 
+The following registry values are used under the `System Parameters` key:
+
+| Value Name | Full Registry Path | Description | Default |
+|---|---|---|---|
+| `Remote Control File` | `HKEY_CURRENT_USER\SOFTWARE\Vibration Research Corporation\VibrationVIEW\{VERSION}\System Parameters\Remote Control File` | Path to the command file written by the client | *(empty — must be set by the client, typically `RemoteControl.txt`)* |
+| `Remote Status File` | `HKEY_CURRENT_USER\SOFTWARE\Vibration Research Corporation\VibrationVIEW\{VERSION}\System Parameters\Remote Status File` | Path to the response file written by VibrationVIEW (added in VibrationVIEW 2025) | `RemoteControl.status` in the VibrationVIEW installation directory |
+
+
 ### File Locations
 
 - **Control File**: `RemoteControl.txt` (created in application directory)
@@ -86,9 +94,27 @@ The application reads from and writes to these registry locations:
 
 ## Permissions
 
-**Important Note**: The response file (`RemoteControl.Status`) is typically located in `C:\Program Files\...` which may require elevated permissions to access. You have two options:
+**Important Note**: By default, the response file (`RemoteControl.Status`) is located in the VibrationVIEW installation directory (typically under `C:\Program Files\...`), which requires elevated permissions to write to.
 
-1. **Run VibrationVIEW as Administrator** (Recommended)
+### Option 1: Redirect the Status File (Recommended)
+
+Set the `Remote Status File` registry value to a location that does not require elevated permissions, such as the same directory as your `RemoteControl.txt` command file:
+
+1. Open Registry Editor (`regedit`)
+2. Navigate to `HKEY_CURRENT_USER\SOFTWARE\Vibration Research Corporation\VibrationVIEW\{VERSION}\System Parameters`
+3. Create or edit the string value `Remote Status File`
+4. Set it to a writable path, e.g. `C:\Users\YourName\Documents\RemoteControl.status`
+5. Restart VibrationVIEW for the change to take effect
+
+This eliminates the need for elevated permissions entirely.
+
+**Important**: VibrationVIEW must be restarted after changing any registry settings for the changes to take effect.
+
+### Option 2: Run with Elevated Permissions
+
+If you prefer to use the default status file location:
+
+1. **Run VibrationVIEW as Administrator**
 2. **Run the client application as Administrator**
 3. **Modify file permissions** on the VibrationVIEW installation directory
 
